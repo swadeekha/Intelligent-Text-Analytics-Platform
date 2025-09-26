@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ITAP MVP</title></head>
+<body>
+  <h2>ITAP — Minimal Demo</h2>
+  <div>
+    <textarea id="input" rows="4" cols="80" placeholder="Type message or paste document"></textarea><br/>
+    <button id="sendChat">Send Chat</button>
+    <button id="sentiment">Analyze Sentiment</button>
+    <button id="summarize">Summarize</button>
+    <button id="generate">Generate (marketing)</button>
+  </div>
+  <div id="out" style="white-space:pre-wrap; margin-top:20px;"></div>
+  <script>
+    const out = document.getElementById('out');
+    document.getElementById('sendChat').onclick = async ()=>{
+      const txt = document.getElementById('input').value;
+      const resp = await fetch('/chat', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({user_id: 'demo_user', message: txt})
+      });
+      const j = await resp.json();
+      out.innerText = "Assistant: " + j.reply;
+    }
+    document.getElementById('sentiment').onclick = async ()=>{
+      const data = new FormData(); data.append('text', document.getElementById('input').value);
+      const r = await fetch('/sentiment',{method:'POST', body: data});
+      out.innerText = JSON.stringify(await r.json(), null, 2);
+    }
+    document.getElementById('summarize').onclick = async ()=>{
+      const data = new FormData(); data.append('text', document.getElementById('input').value);
+      const r = await fetch('/summarize',{method:'POST', body: data});
+      out.innerText = JSON.stringify(await r.json(), null, 2);
+    }
+    document.getElementById('generate').onclick = async ()=>{
+      const data = new FormData(); data.append('prompt', document.getElementById('input').value);
+      const r = await fetch('/generate',{method:'POST', body: data});
+      out.innerText = JSON.stringify(await r.json(), null, 2);
+    }
+  </script>
+</body>
+</html>
