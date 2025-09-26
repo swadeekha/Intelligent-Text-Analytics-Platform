@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+transformers>=4.20.0
+sentence-transformers
+torch
+pydantic
+aiofiles
+python-socketio[asyncio_client]
+python-socketio
+uvicorn
+nltk
+vaderSentiment
